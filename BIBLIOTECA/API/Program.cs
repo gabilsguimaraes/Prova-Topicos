@@ -13,5 +13,44 @@ app.MapGet("/", (BibliotecaDbContext context) =>
     return Results.Ok(categorias);
 });
 
+//1. Adicionar Livros 
+app.MapPost("/api/livros", ([FromBody] Livro livro, [FromServices] BibliotecaDbContext ctx) => 
+{
+    // Verificar caracteres
+    /*if
+    {
+        return Results.BadRequest("Título deve ter no mínimo 3 caracteres.");
+    }
+    */
+
+    //Verifica se o categoriaId corresponde a uma categoria existente
+    Categoria? categoria = ctx.Categorias.Find(livro.CategoriaId);
+    if (categoria is null)
+    {
+        return Results.NotFound("Categoria inválida. O ID da categoria fornecido não existe.");
+    }
+
+    livro.Categoria = categoria;
+
+    ctx.Livros.Add(livro);
+    ctx.SaveChanges();
+
+    return Results.Created("/api/categorias"+livro.Id, livro);
+    
+});
+
+//2.Listar Livros
+app.MapGet("/api/livros", ([FromServices] BibliotecaDbContext ctx) =>
+{
+    if (ctx.Livros.Any())
+    {
+        return Results.Ok(ctx.Livros.Include(x => x.Categoria).ToList());
+    }
+    return Results.NotFound();
+});
+
+
 
 app.Run();
+
+
