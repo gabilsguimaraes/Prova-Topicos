@@ -49,6 +49,17 @@ app.MapGet("/api/livros", ([FromServices] BibliotecaDbContext ctx) =>
     return Results.NotFound();
 });
 
+//3. Buscar livro por Id
+app.MapGet("/api/livros/{id}", ([FromRoute] string id,
+    [FromServices] BibliotecaDbContext ctx) =>
+{
+    Livro? livro = ctx.Livros.Find(id);
+    if (livro == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(livro);
+});
 
 
 app.Run();
