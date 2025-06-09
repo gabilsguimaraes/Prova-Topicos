@@ -1,0 +1,10 @@
+### Lista de Livros
+GET http://localhost:5231
+
+### Cadastrar Livro
+POST http://localhost:5231
+Content-Type: application/json
+
+{
+
+}

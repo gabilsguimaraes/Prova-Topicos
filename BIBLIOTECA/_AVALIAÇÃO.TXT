@@ -1,0 +1,52 @@
+API de Gerenciamento de Livros
+
+Objetivo:
+    Construir uma API simplificada para gerenciar livros em uma biblioteca digital, com 5 endpoints essenciais.
+
+Endpoints:
+    1. Adicionar Livro (POST)
+        Rota: /api/livros
+        Funcionalidade: Adiciona um novo livro ao sistema.
+        Validações e Mensagens de Erro Esperadas (Status HTTP: 400 Bad Request /  404 Not Found):
+            titulo: Se tiver menos de 3 caracteres: "Título deve ter no mínimo 3 caracteres."
+            autor: Se tiver menos de 3 caracteres: "Autor deve ter no mínimo 3 caracteres."
+            categoria (referenciada por categoriaId):
+                Se o categoriaId não corresponder a uma categoria existente: "Categoria inválida. O ID da categoria fornecido não existe."
+
+        Resposta de Sucesso (Status HTTP: 201 Created): Retorna o objeto do livro recém-criado, incluindo os detalhes da categoria associada.
+
+    2. Listar Todos os Livros (GET)
+        Rota: /api/livros
+        Funcionalidade: Retorna uma lista de todos os livros cadastrados no sistema.
+        Resposta de Sucesso (Status HTTP: 200 OK): Retorna um array de objetos de livro, onde cada objeto de livro inclui os detalhes de sua categoria.
+
+    3. Buscar Livro por ID (GET)
+        Rota: /api/livros/{id}
+        Funcionalidade: Retorna os detalhes de um livro específico com base no seu ID.
+        Validações e Mensagens de Erro Esperadas:
+            Livro não encontrado (Status HTTP: 404 Not Found): "Livro com ID {id} não encontrado."
+        Resposta de Sucesso (Status HTTP: 200 OK): Retorna o objeto do livro correspondente ao ID, incluindo os detalhes da categoria.
+
+    4. Atualizar Livro (PUT)
+        Rota: /api/livros/{id}
+        Funcionalidade: Atualiza todos os campos de um livro existente.
+        Validações e Mensagens de Erro Esperadas (Status HTTP: 400 Bad Request / 404 Not Found):
+            Validações dos campos (titulo, autor, categoria): As mesmas regras e mensagens de erro do endpoint POST se aplicam a esses campos.
+            Livro não encontrado para atualização (Status HTTP: 404 Not Found): "Livro com ID {id} não encontrado para atualização."
+        Resposta de Sucesso (Status HTTP: 200 OK): Retorna o objeto do livro atualizado, incluindo os detalhes da categoria.
+
+    5. Remover Livro (DELETE)
+        Rota: /api/livros/{id}
+        Funcionalidade: Exclui um livro do sistema com base no seu ID.
+        Mensagens de Erro Esperadas:
+            Livro não encontrado para remoção (Status HTTP: 404 Not Found): "Livro com ID {id} não encontrado para remoção."
+        Resposta de Sucesso (Status HTTP: 204 No Content): Não retorna corpo na resposta, indicando que a operação foi bem-sucedida e não há conteúdo para enviar.
+
+Requisitos Adicionais:
+    Banco de Dados:
+        Configurar um banco para persistir os dados dos livros.
+
+    Versionamento (Commits):
+        Mínimo de 5 commits com mensagens claras (ex: "Endpoint POST /livros implementado").
+        Arquivo de Teste (_livros.http):
+        Incluir exemplos de requisições para todos os endpoints (usando Rest Client).

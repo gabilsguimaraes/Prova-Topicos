@@ -1,0 +1,9 @@
+dotnet run
+dotnet run --project NomeDoProjeto
+
+dotnet watch run
+
+dotnet restore
+
+dotnet ef migrations add NomeMigracao
+dotnet ef database update
