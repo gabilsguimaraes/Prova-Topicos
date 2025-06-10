@@ -14,7 +14,7 @@ app.MapGet("/", (BibliotecaDbContext context) =>
 });
 
 //1. Adicionar Livros 
-app.MapPost("/api/livros", ([FromBody] Livro livro, [FromServices] BibliotecaDbContext ctx) => 
+app.MapPost("/api/livros", ([FromBody] Livro livro, [FromServices] BibliotecaDbContext context) => 
 {
     // Verificar caracteres
     /*if
@@ -24,7 +24,7 @@ app.MapPost("/api/livros", ([FromBody] Livro livro, [FromServices] BibliotecaDbC
     */
 
     //Verifica se o categoriaId corresponde a uma categoria existente
-    Categoria? categoria = ctx.Categorias.Find(livro.CategoriaId);
+    Categoria? categoria = context.Categorias.Find(livro.CategoriaId);
     if (categoria is null)
     {
         return Results.NotFound("Categoria inválida. O ID da categoria fornecido não existe.");
@@ -32,33 +32,33 @@ app.MapPost("/api/livros", ([FromBody] Livro livro, [FromServices] BibliotecaDbC
 
     livro.Categoria = categoria;
 
-    ctx.Livros.Add(livro);
-    ctx.SaveChanges();
+    context.Livros.Add(livro);
+    context.SaveChanges();
 
     return Results.Created("/api/categorias"+livro.Id, livro);
     
 });
 
 //2.Listar Livros
-app.MapGet("/api/livros", ([FromServices] BibliotecaDbContext ctx) =>
+app.MapGet("/api/livros", ([FromServices] BibliotecaDbContext context) =>
 {
-    if (ctx.Livros.Any())
+    if (context.Livros.Any())
     {
-        return Results.Ok(ctx.Livros.Include(x => x.Categoria).ToList());
+        return Results.Ok(context.Livros.Include(x => x.Categoria).ToList());
     }
     return Results.NotFound();
 });
 
 //3. Buscar livro por Id
-app.MapGet("/api/livros/{id}", ([FromRoute] string id,
-    [FromServices] BibliotecaDbContext ctx) =>
+app.MapGet("/api/livros/{id}", ([FromRoute] int id,
+    [FromServices] BibliotecaDbContext context) =>
 {
-    Livro? livro = ctx.Livros.Find(id);
+    Livro? livro = context.Livros.Find(id);
     if (livro == null)
     {
-        return Results.NotFound();
+        return Results.NotFound("Livro com ID {id} não encontrado.");
     }
-    return Results.Ok(livro);
+    return Results.Ok(context.Livros.Include(x => x.Categoria).ToList());
 });
 
 
