@@ -61,6 +61,29 @@ app.MapGet("/api/livros/{id}", ([FromRoute] int id,
     return Results.Ok(context.Livros.Include(x => x.Categoria).ToList());
 });
 
+//4. Atualizar Livro
+app.MapPut("/api/livross/{id}", ([FromRoute] int id,
+    [FromBody] Livro livroAlterado,
+    [FromServices] BibliotecaDbContext context) =>
+{
+    Livro? livro = context.Livros.Find(id);
+    if (livro == null)
+    {
+        return Results.NotFound("Livro com ID {id} não encontrado para atualização.");
+    }
+    Categoria? categoria = context.Categorias.Find(livro.CategoriaId);
+    if (categoria is null)
+    {
+        return Results.NotFound("Categoria inválida. O ID da categoria fornecido não existe.");
+    }
+    livro.Categoria = categoria;
+    livro.Titulo = livroAlterado.Titulo;
+    livro.Autor = livroAlterado.Autor;
+    context.Livros.Update(livro);
+    context.SaveChanges();
+    return Results.Ok(livro);
+});
+
 
 app.Run();
 
