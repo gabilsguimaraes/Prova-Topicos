@@ -6,9 +6,24 @@ POST http://localhost:5085/api/livros
 Content-Type: application/json
 
 {
-    "id" : 1,
+    "id" : 5,
     "titulo" : "Jogos Vorazes",
     "Autor" : "Suzanne Collins",
     "categoriaId" : 4
 }
 
+### GET - Buscar livro por ID
+GET http://localhost:5085/api/livros/5
+
+### PUT - Atualizar livro existente
+PUT http://localhost:5085/api/livros/3
+Content-Type: application/json
+
+{
+  "titulo": "A Máquina do Tempo - Edição Atualizada",
+  "autor": "H.G. Wells",
+  "categoriaId": 2
+}
+
+### DELETE - Buscar livro por ID
+DELETE http://localhost:5085/api/livros/5
